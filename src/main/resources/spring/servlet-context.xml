@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<mvc:annotation-driven/>
+	
+	<context:component-scan base-package="com.example.myjbpm.controler"/>
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1"/>
+	</bean>
+	
+	<bean name="asyncTaskExecutor0" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="0"/>
+	</bean>
+	<bean name="asyncTaskExecutor1" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="1"/>
+	</bean>
+	<bean name="asyncTaskExecutor2" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="2"/>
+	</bean>
+	<bean name="asyncTaskExecutor3" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="3"/>
+	</bean>
+	<bean name="asyncTaskExecutor4" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="4"/>
+	</bean>
+	<bean name="asyncTaskExecutor5" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="5"/>
+	</bean>
+	<bean name="asyncTaskExecutor6" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="6"/>
+	</bean>
+	<bean name="asyncTaskExecutor7" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="7"/>
+	</bean>
+	<bean name="asyncTaskExecutor8" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="8"/>
+	</bean>
+	<bean name="asyncTaskExecutor9" class="com.example.myjbpm.async.task.executor.AsyncTaskExecutor">
+		<constructor-arg name="divisor" value="10"/>
+		<constructor-arg name="reminder" value="9"/>
+	</bean>
+	
+	<task:scheduled-tasks scheduler="myScheduler">
+	    <task:scheduled ref="asyncTaskExecutor0" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor1" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor2" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor3" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor4" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor5" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor6" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor7" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor8" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	    <task:scheduled ref="asyncTaskExecutor9" method="doExecute" fixed-delay="100" initial-delay="100"/>
+	</task:scheduled-tasks>
+	
+	<task:scheduler id="myScheduler" pool-size="10"/>
+</beans>

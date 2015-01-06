@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="myjbmpPersistenceUnit">
+
+
+		<mapping-file>META-INF/JBPMorm-JPA2.xml</mapping-file>
+		<mapping-file>META-INF/ProcessInstanceInfoMapping-JPA2.xml</mapping-file>
+		<mapping-file>META-INF/ExtraIndexes.hbm.xml</mapping-file>
+
+		<class>org.drools.persistence.info.SessionInfo</class>
+		<class>org.jbpm.persistence.processinstance.ProcessInstanceInfo</class>
+		<class>org.jbpm.persistence.processinstance.ProcessInstanceEventInfo</class>
+		<class>org.drools.persistence.info.WorkItemInfo</class>
+	</persistence-unit>
+</persistence> 

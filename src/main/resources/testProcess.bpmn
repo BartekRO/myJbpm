@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_ids" structureRef="java.util.List" />
+  <itemDefinition id="_long" structureRef="Long" />
+  <itemDefinition id="null" />
+
+  <process processType="Private" isExecutable="true" id="testProcess" name="testProcess" >
+
+    
+    
+   
+    <extensionElements>
+     <tns:import name="org.drools.runtime.process.ProcessRuntime" />
+    </extensionElements>
+    <!-- process variables -->
+    <property id="ids" itemSubjectRef="_ids"/>
+    <property id="sessionId" itemSubjectRef="_long"/>
+
+    <!-- nodes -->
+    <startEvent id="startNode" name="startNode"  isInterrupting="false"/>
+    <endEvent id="endNode" name="endNode" />
+
+    <subProcess id="forEachSubProcess" name="forEachSubProcess">
+		<ioSpecification>
+		<dataInput id="iterationCollection" name="MultiInstanceInput"/>
+		<inputSet>
+			<dataInputRefs>iterationCollection</dataInputRefs>
+		</inputSet>
+		</ioSpecification>
+		<dataInputAssociation>
+			<sourceRef>ids</sourceRef>
+			<targetRef>iterationCollection</targetRef>
+		</dataInputAssociation>
+		<multiInstanceLoopCharacteristics>
+			<loopDataInputRef>iterationCollection</loopDataInputRef>
+			<inputDataItem xsi:type="tDataInput" id="item" itemSubjectRef="_long"/>
+		</multiInstanceLoopCharacteristics>
+		<startEvent id="subProcessStart" name="subProcessStart" />
+		<scriptTask id="myLog" name="Script" scriptFormat="http://www.java.com/java" >
+			<script>System.out.println("Hi bitch " + item);</script>
+		</scriptTask>
+		
+		<callActivity id="subSubProcess" name="subSubProcess" calledElement="testSubProcess" tns:independent="false" >
+	      <ioSpecification>
+	        <dataInput id="idDataInput" name="someId" />
+	       	<dataInput id="sessionIdDataInput" name="sessionId" />
+	        <inputSet>
+	        	<dataInputRefs>idDataInput</dataInputRefs>
+	        	<dataInputRefs>sessionIdDataInput</dataInputRefs>
+	        </inputSet>
+	      </ioSpecification>
+	      <dataInputAssociation>
+	        <sourceRef>item</sourceRef>
+	        <targetRef>idDataInput</targetRef>
+	      </dataInputAssociation>
+
+	    </callActivity>
+		
+		<endEvent id="subProcessEnd" name="subProcessEnd" />
+		<sequenceFlow  sourceRef="subProcessStart" targetRef="myLog"/>
+		<sequenceFlow sourceRef="myLog" targetRef="subSubProcess"/>
+		<sequenceFlow sourceRef="subSubProcess" targetRef="subProcessEnd"/>
+	</subProcess>
+    
+    <!-- connections -->
+    <sequenceFlow sourceRef="startNode" targetRef="forEachSubProcess" />
+    <sequenceFlow sourceRef="forEachSubProcess" targetRef="endNode" />
+  </process>
+</definitions>

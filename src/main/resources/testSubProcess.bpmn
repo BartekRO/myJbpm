@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_ids" structureRef="java.util.List" />
+  <itemDefinition id="_long" structureRef="Long" />
+  <itemDefinition id="null" />
+
+  <process processType="Private" isExecutable="true" id="testSubProcess" name="testSubProcess" >
+
+    <extensionElements>
+     <tns:import name="org.drools.runtime.process.ProcessRuntime" />
+     <tns:import name="com.example.myjbpm.fact.SomeFact" />
+    </extensionElements>
+    <!-- process variables -->
+    <property id="someId" itemSubjectRef="_long"/>
+    <property id="sessionId" itemSubjectRef="_long"/>
+
+    <!-- nodes -->
+    <startEvent id="startNode" name="startNode"  isInterrupting="false"/>
+    <endEvent id="endNode" name="endNode" />
+
+    <task id="dummyTask" name="dummyTask" tns:taskName="com.example.myjbpm.handler.AsyncWorkItemHandler" >
+		<ioSpecification>
+			<dataInput id="sessionIdDataInput" name="SessionId" />
+        	<dataInput id="asyncTaskNameDataInput" name="AsyncHandlerName" />
+        	<inputSet>
+          		<dataInputRefs>sessionIdDataInput</dataInputRefs>
+          		<dataInputRefs>asyncTaskNameDataInput</dataInputRefs>
+          	</inputSet>
+		</ioSpecification>
+		<dataInputAssociation>
+	        <sourceRef>sessionId</sourceRef>
+	        <targetRef>sessionIdDataInput</targetRef>
+	      </dataInputAssociation>
+	      <dataInputAssociation>
+	        <targetRef>asyncTaskNameDataInput</targetRef>
+	        <assignment>
+	          <from xsi:type="tFormalExpression">dummyAsyncSleepTask</from>
+	          <to xsi:type="tFormalExpression">asyncTaskNameDataInput</to>
+	        </assignment>
+	      </dataInputAssociation>
+    </task>
+    <!--
+     <task id="dummyTask11" name="dummyTask11" tns:taskName="com.example.myjbpm.handler.AsyncWorkItemHandler" >
+		<ioSpecification>
+			<dataInput id="sessionIdDataInput" name="SessionId" />
+        	<dataInput id="asyncTaskNameDataInput" name="AsyncHandlerName" />
+        	<inputSet>
+          		<dataInputRefs>sessionIdDataInput</dataInputRefs>
+          		<dataInputRefs>asyncTaskNameDataInput</dataInputRefs>
+          	</inputSet>
+		</ioSpecification>
+		<dataInputAssociation>
+	        <sourceRef>sessionId</sourceRef>
+	        <targetRef>sessionIdDataInput</targetRef>
+	      </dataInputAssociation>
+	      <dataInputAssociation>
+	        <targetRef>asyncTaskNameDataInput</targetRef>
+	        <assignment>
+	          <from xsi:type="tFormalExpression">dummyAsyncSleepTask</from>
+	          <to xsi:type="tFormalExpression">asyncTaskNameDataInput</to>
+	        </assignment>
+	      </dataInputAssociation>
+    </task>
+    -->
+    
+    
+    <exclusiveGateway id="divGateway" name="divGateway" gatewayDirection="Diverging" />
+    <exclusiveGateway id="convGateway" name="convGateway" gatewayDirection="Converging" />
+    
+    <task id="dummyTask2" name="dummyTask2" tns:taskName="com.example.myjbpm.handler.AsyncWorkItemHandler" >
+		<ioSpecification>
+			<dataInput id="sessionIdDataInput" name="SessionId" />
+        	<dataInput id="asyncTaskNameDataInput" name="AsyncHandlerName" />
+        	<inputSet>
+          		<dataInputRefs>sessionIdDataInput</dataInputRefs>
+          		<dataInputRefs>asyncTaskNameDataInput</dataInputRefs>
+          	</inputSet>
+		</ioSpecification>
+		<dataInputAssociation>
+	        <sourceRef>sessionId</sourceRef>
+	        <targetRef>sessionIdDataInput</targetRef>
+	      </dataInputAssociation>
+	      <dataInputAssociation>
+	        <targetRef>asyncTaskNameDataInput</targetRef>
+	        <assignment>
+	          <from xsi:type="tFormalExpression">dummyAsyncTask2</from>
+	          <to xsi:type="tFormalExpression">asyncTaskNameDataInput</to>
+	        </assignment>
+	      </dataInputAssociation>
+    </task>
+    
+    <task id="dummyTask3" name="dummyTask3" tns:taskName="com.example.myjbpm.handler.AsyncWorkItemHandler" >
+		<ioSpecification>
+			<dataInput id="sessionIdDataInput" name="SessionId" />
+        	<dataInput id="asyncTaskNameDataInput" name="AsyncHandlerName" />
+        	<inputSet>
+          		<dataInputRefs>sessionIdDataInput</dataInputRefs>
+          		<dataInputRefs>asyncTaskNameDataInput</dataInputRefs>
+          	</inputSet>
+		</ioSpecification>
+		<dataInputAssociation>
+	        <sourceRef>sessionId</sourceRef>
+	        <targetRef>sessionIdDataInput</targetRef>
+	      </dataInputAssociation>
+	      <dataInputAssociation>
+	        <targetRef>asyncTaskNameDataInput</targetRef>
+	        <assignment>
+	          <from xsi:type="tFormalExpression">dummyAsyncTask3</from>
+	          <to xsi:type="tFormalExpression">asyncTaskNameDataInput</to>
+	        </assignment>
+	      </dataInputAssociation>
+    </task>
+    
+    <!-- connections -->
+    <sequenceFlow sourceRef="startNode" targetRef="dummyTask" />
+    <sequenceFlow sourceRef="dummyTask" targetRef="divGateway" />
+    <sequenceFlow sourceRef="divGateway" targetRef="dummyTask2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule">SomeFact(num == true)</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow sourceRef="divGateway" targetRef="dummyTask3" >
+        <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule">SomeFact(num == false)</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow sourceRef="dummyTask2" targetRef="convGateway" />
+    <sequenceFlow sourceRef="dummyTask3" targetRef="convGateway" />
+    <sequenceFlow sourceRef="convGateway" targetRef="endNode" />
+<!--<sequenceFlow sourceRef="dummyTask" targetRef="dummyTask11" />
+<sequenceFlow sourceRef="dummyTask11" targetRef="endNode" />-->
+   
+    
+  </process>
+</definitions>
